@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "Engine/World.h"
 #include "TankPlayerController.h"
 
 void ATankPlayerController::BeginPlay()
@@ -32,15 +32,46 @@ ATank* ATankPlayerController::GetControlledTank() const
 
 bool ATankPlayerController::GetSightrayHitLocation(OUT FVector& HitLocation) const
 {
-	HitLocation = FVector(1.f);
+	// Find crosshair position
+	int32 ViewportSizeX, ViewportSizeY;
+	GetViewportSize(ViewportSizeX, ViewportSizeY);
 
-	ATank* Tank = GetControlledTank();
-	if (!Tank)
+	FVector2D ScreenLocation = { ViewportSizeX * CrossHairXLocation, ViewportSizeY * CrossHairYLocation };
+	//UE_LOG(LogTemp, Warning, TEXT("ScreenLocation: %s"), *ScreenLocation.ToString());
+
+	FVector LookDirection;
+	if (GetLookDirection(ScreenLocation, LookDirection))
 	{
-		return false;
+		GetLookVectorHitLocation(LookDirection, HitLocation);
 	}
 
 	return true;
+}
+
+bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, OUT FVector& HitLocation) const
+{
+	FHitResult HitResult;
+	FVector StartLocation = PlayerCameraManager->GetCameraLocation();
+	FVector EndLocation = StartLocation + (LookDirection * LineTraceRangeCM);
+
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, 
+		StartLocation, 
+		EndLocation,
+		ECollisionChannel::ECC_Visibility))
+	{
+		HitLocation = HitResult.Location;
+		return true;
+	}
+	HitLocation = FVector(0);
+	return false;
+}
+
+bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, OUT FVector& LookDirection) const
+{
+	FVector CameraWorldLocation; // Temp
+	return (DeprojectScreenPositionToWorld(ScreenLocation.X,
+		ScreenLocation.Y,
+		CameraWorldLocation, LookDirection));
 }
 
 void ATankPlayerController::AimTowardsCrosshair()
@@ -52,8 +83,7 @@ void ATankPlayerController::AimTowardsCrosshair()
 
 	if (GetSightrayHitLocation(HitLocation))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("HitLocation: %s"), *HitLocation.ToString());
-		// Tell controlled tank to aim at this point
+		GetControlledTank()->AimAt(HitLocation);
 	}
 
 }
