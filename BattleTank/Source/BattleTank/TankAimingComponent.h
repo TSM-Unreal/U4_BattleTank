@@ -7,6 +7,9 @@
 #include "GameFramework/Pawn.h"
 #include "TankAimingComponent.generated.h"
 
+class UTankBarrel; 
+
+// Hold barrel properties
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BATTLETANK_API UTankAimingComponent : public UActorComponent
@@ -16,6 +19,8 @@ class BATTLETANK_API UTankAimingComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UTankAimingComponent();
+	void AimAt(FVector HitLocation, float LaunchSpeed);
+	void SetBarrelReference(UTankBarrel* BarrelToSet);
 
 protected:
 	// Called when the game starts
@@ -23,7 +28,8 @@ protected:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-public:
-	void AimAt(FVector HitLocation);
+private:
+	void MoveBarrelTowards(FVector AimDirection);
+	UTankBarrel* Barrel = nullptr;
 		
 };
