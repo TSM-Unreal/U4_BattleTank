@@ -7,7 +7,8 @@
 #include "GameFramework/Pawn.h"
 #include "TankAimingComponent.generated.h"
 
-class UTankBarrel; 
+class UTankBarrel;
+class UTankTurret;
 
 // Hold barrel properties
 
@@ -21,6 +22,7 @@ public:
 	UTankAimingComponent();
 	void AimAt(FVector HitLocation, float LaunchSpeed);
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
+	void SetTurretReference(UTankTurret* TurretToSet);
 
 protected:
 	// Called when the game starts
@@ -30,6 +32,7 @@ protected:
 
 private:
 	void MoveBarrelTowards(FVector AimDirection);
+	void MoveTurretTowards(FVector AimDirection);
 	UTankBarrel* Barrel = nullptr;
-		
+	UTankTurret* Turret = nullptr;
 };
