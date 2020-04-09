@@ -15,5 +15,5 @@ void UTankTurret::Rotate(float RelativeSpeed)
 	SetRelativeRotation(FRotator(0, NewRotation, 0));
 
 	auto Time = GetWorld()->GetTimeSeconds();
-	UE_LOG(LogTemp, Warning, TEXT("%f: Barrel->Rotate() called at speed %f"), Time, RelativeSpeed)
+	//UE_LOG(LogTemp, Warning, TEXT("%f: Barrel->Rotate() called at speed %f"), Time, RelativeSpeed)
 }
