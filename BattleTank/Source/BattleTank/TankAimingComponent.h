@@ -10,8 +10,6 @@
 class UTankBarrel;
 class UTankTurret;
 
-// Hold barrel properties
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BATTLETANK_API UTankAimingComponent : public UActorComponent
 {
