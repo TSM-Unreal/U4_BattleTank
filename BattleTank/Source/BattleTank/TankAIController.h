@@ -18,5 +18,9 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaSeconds) override;
+
+private:
+	// How close can AI tank get?
+	float AcceptanceRadius = 3000;
 	
 };
