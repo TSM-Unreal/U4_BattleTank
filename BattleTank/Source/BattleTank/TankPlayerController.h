@@ -22,7 +22,9 @@ private:
 	float LineTraceRangeCM = 10000.f * 100.f;
 
 protected:
+	UFUNCTION(BlueprintCallable, Category = "Setup")
 	ATank* GetControlledTank() const;
+
 	virtual void BeginPlay() override;
 	bool GetSightrayHitLocation(OUT FVector& HitLocation) const;
 	bool GetLookVectorHitLocation(FVector LookDirection, OUT FVector& HitLocation) const;

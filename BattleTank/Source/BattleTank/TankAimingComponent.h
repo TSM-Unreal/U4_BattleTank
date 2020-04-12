@@ -7,6 +7,15 @@
 #include "GameFramework/Pawn.h"
 #include "TankAimingComponent.generated.h"
 
+// Enum for aiming state
+UENUM()
+enum class EFiringStatus : uint8
+{
+	Reloading,
+	Aiming,
+	Locked
+};
+
 class UTankBarrel;
 class UTankTurret;
 
@@ -23,6 +32,9 @@ public:
 	void SetTurretReference(UTankTurret* TurretToSet);
 
 protected:
+	UPROPERTY(BlueprintReadOnly, Category = "State")
+	EFiringStatus FiringState = EFiringStatus::Reloading;
+
 	// Called when the game starts
 	virtual void BeginPlay() override;
 	// Called every frame
@@ -33,4 +45,5 @@ private:
 	void MoveTurretTowards(FVector AimDirection);
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
+
 };
