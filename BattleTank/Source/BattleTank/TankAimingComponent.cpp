@@ -16,15 +16,12 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
-void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
+void UTankAimingComponent::Initialise(UTankTurret* TurretToSet, UTankBarrel* BarrelToSet)
 {
+	Turret = TurretToSet;
 	Barrel = BarrelToSet;
 }
 
-void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet)
-{
-	Turret = TurretToSet;
-}
 
 // Called when the game starts
 void UTankAimingComponent::BeginPlay()
@@ -47,13 +44,13 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
 	auto OurTankName = GetOwner()->GetName();
-	if (!Barrel)
+	if (!ensure(Barrel))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Barrel not set!"));
 		return;
 	}
 
-	if (!Turret)
+	if (!ensure(Turret))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Turret not set!"));
 		return;

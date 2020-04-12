@@ -2,21 +2,24 @@
 
 #include "Engine/World.h"
 #include "Tank.h"
+#include "TankAimingComponent.h"
 #include "TankPlayerController.h"
 
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	UE_LOG(LogTemp, Warning, TEXT("ATankPlayerController BeginPlay"));
-	ATank* Tank = GetControlledTank();
-	if (Tank)
+
+	auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+	if (AimingComponent)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("ATankPlayerController - Possessed Tank: %s"), *Tank->GetName());
+		FoundAimingComponent(AimingComponent);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("ATankPlayerController - Not possessing Tank"));
+		UE_LOG(LogTemp, Warning, TEXT("TankPlayerController: Can't find TankAimingComponent"));
 	}
+
 }
 
 void ATankPlayerController::Tick(float DeltaSeconds)
@@ -77,7 +80,7 @@ bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, OUT FVect
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	if (!GetControlledTank())
+	if (!ensure(GetControlledTank()))
 		return;
 
 	FVector HitLocation; // Out param
