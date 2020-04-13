@@ -68,6 +68,8 @@ bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, OUT FVect
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
+	if (!GetPawn()) { return; }
+
 	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 	if (!ensure(AimingComponent))
 		return;
